@@ -9,7 +9,11 @@ object FutureLoggable {
         val res = Future {
             body
         }
-        res.onFailure({case ex: Exception => log.error(s"Exception: ${ex.getMessage}", ex)})
+        res.onFailure({ case t: Throwable => {
+            log.error(s"Exception: ${t.getMessage}", t)
+            throw t
+        }
+        })
         res
     }
 }
